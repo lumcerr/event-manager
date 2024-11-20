@@ -1,6 +1,9 @@
 package sk.kasv.robert.hibernate.Entity;
 
 import jakarta.persistence.*;
+import sk.kasv.robert.hibernate.DAO.StudentDAO;
+
+import java.util.List;
 
 @Entity
 @Table(name = "student")
@@ -54,10 +57,32 @@ public class Student {
 
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
     public Student(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
+    private void queryForStudentsByLastName(StudentDAO studentDAO){
+        List<Student> theStudents= studentDAO.findByLastName("novak");
+        for(Student student:theStudents)
+         System.out.println(student);
+    }
+    private void queryForStudents(StudentDAO studentDAO){
+        List<Student> theStudents = studentDAO.findAll();
+        for (Student student:theStudents)
+            System.out.println(student);
+    }
 
+    private void readStudent(StudentDAO studentDAO){}
+    private void createStudent(StudentDAO studentDAO){}
 }
