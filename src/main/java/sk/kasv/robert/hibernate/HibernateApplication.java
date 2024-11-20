@@ -18,8 +18,14 @@ public class HibernateApplication {
 		return runner -> {
 			System.out.println("App starting");
 			//createStudent(studentDAO);
-			readStudent(studentDAO);
+			//readStudent(studentDAO);
+			updateStudent(studentDAO);
 		};
+	}
+
+	private void updateStudent(StudentDAO studentDAO) {
+		Student thestudent = studentDAO.findById(2);
+		thestudent.setLastName("Despacito");
 	}
 
 	private void createStudent(StudentDAO studentDAO) {
