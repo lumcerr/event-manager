@@ -7,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import sk.kasv.robert.hibernate.Entity.Student;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @Repository
 public class StudentDAOImpl implements StudentDAO {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Autowired
     public StudentDAOImpl(EntityManager entityManager) {
@@ -50,4 +49,24 @@ public class StudentDAOImpl implements StudentDAO {
     public void update(Student theStudent) {
         entityManager.merge(theStudent);
     }
+
+    @Override
+    public void delete(int studentId) {
+        Student theStudent = entityManager.find(Student.class, studentId);
+        if (theStudent != null) {
+            entityManager.remove(theStudent);
+        } else {
+            throw new RuntimeException("Student with ID " + studentId + " not found.");
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
+

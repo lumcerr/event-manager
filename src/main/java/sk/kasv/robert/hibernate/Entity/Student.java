@@ -24,7 +24,7 @@ public class Student {
         return firstName;
     }
 
-    public String getLastName() {
+   public String getLastName() {
         return lastName;
     }
 

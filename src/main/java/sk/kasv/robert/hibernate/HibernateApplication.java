@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import sk.kasv.robert.hibernate.DAO.StudentDAO;
 import sk.kasv.robert.hibernate.Entity.Student;
+import java.util.List;
 @SpringBootApplication
 public class HibernateApplication {
 
@@ -19,14 +20,12 @@ public class HibernateApplication {
 			System.out.println("App starting");
 			//createStudent(studentDAO);
 			//readStudent(studentDAO);
-			updateStudent(studentDAO);
+			//updateStudent(studentDAO);
+			//readStudent(studentDAO);
 		};
 	}
 
-	private void updateStudent(StudentDAO studentDAO) {
-		Student thestudent = studentDAO.findById(2);
-		thestudent.setLastName("Despacito");
-	}
+
 
 	private void createStudent(StudentDAO studentDAO) {
 		System.out.println("Creating a new student object...");
@@ -43,12 +42,32 @@ public class HibernateApplication {
 		System.out.println("Found the student: " + myStudent);
 	}
 
-	private void queryForStudents(StudentDAO studentDAO) {
-
+	private void queryForStudents(StudentDAO studentDAO){
+		System.out.println("All students:");
+		List<Student> theStudents = studentDAO.findAll();
+		for(Student student:theStudents)
+			System.out.println(student);
+		System.out.println("------------------------");
 	}
+
 
 	private void queryForStudentsByLastName(StudentDAO studentDAO) {
-
+		String lastName = "Connor";
+		System.out.println("Student with lastname: "+lastName);
+		List<Student> theStudents = studentDAO.findByLastName(lastName);
+		for (Student student : theStudents) {
+			System.out.println(student);
+		}
 	}
+
+	private void updateStudent(StudentDAO studentDAO) {
+		Student theStudent = studentDAO.findById(2);
+		theStudent.setFirstName("Despacito");
+		theStudent.setLastName("Lover");
+		theStudent.setEmail("lover.d@gmail.com");
+		studentDAO.update(theStudent);
+		System.out.println("Student successfully updated: "+theStudent);
+	}
+
 }
 
