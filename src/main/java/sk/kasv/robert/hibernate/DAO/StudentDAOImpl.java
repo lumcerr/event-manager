@@ -51,12 +51,12 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public void delete(int studentId) {
-        Student theStudent = entityManager.find(Student.class, studentId);
+    public void delete(int theStudentId) {
+        Student theStudent = entityManager.find(Student.class, theStudentId);
         if (theStudent != null) {
             entityManager.remove(theStudent);
         } else {
-            throw new RuntimeException("Student with ID " + studentId + " not found.");
+            throw new RuntimeException("Student with ID " + theStudentId + " not found.");
         }
     }
 
