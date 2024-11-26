@@ -1,9 +1,6 @@
 package sk.kasv.robert.hibernate.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 public class Instructor {
     @Id
@@ -16,9 +13,10 @@ public class Instructor {
     private String lastName;
     @Column(name = "email")
     private String email;
-    @Column(name = "instructor_detailID")
-    private String instuctor_detail_id;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "instructor_detail_id")
+    private InstructorDetail instructorDetail;
+    //----------------------------------------Getters----------------------------------
     public int getId() {
         return id;
     }
@@ -32,10 +30,24 @@ public class Instructor {
     public String getEmail() {
         return email;
     }
-
-    public String getInstuctor_detail_id() {
-        return instuctor_detail_id;
+    public InstructorDetail getInstructorDetail() {
+        return instructorDetail;
     }
+    //----------------------------------------Setters----------------------------------
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setInstructorDetail(InstructorDetail instructorDetail) {
+        this.instructorDetail = instructorDetail;
+    }
+
 
     public Instructor(){};
     public  Instructor(String firstName, String lastName, String email){

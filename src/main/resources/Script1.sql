@@ -26,3 +26,42 @@ INSERT INTO student VALUES (12, 'Grace', 'Walker', 'grace.walker@gmail.com');
 INSERT INTO student VALUES (13, 'Henry', 'Young', 'henry.young@gmail.com');
 INSERT INTO student VALUES (14, 'Ivy', 'King', 'ivy.king@gmail.com');
 INSERT INTO student VALUES (15, 'Jack', 'Wright', 'jack.wright@gmail.com');
+
+DROP TABLE IF EXISTS instructor_detail;
+
+CREATE TABLE instructor_detail(
+    id int NOT NULL AUTO_INCREMENT,
+    youtube_channel varchar(128) DEFAULT NULL,
+    hobby varchar(45) DEFAULT NULL,
+    PRIMARY KEY (id)
+)AUTO_INCREMENT=1, DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS instructor;
+
+CREATE TABLE instructor(
+    id int NOT NULL AUTO_INCREMENT,
+        first_name varchar(45) DEFAULT NULL,
+        last_name varchar(45) DEFAULT NULL,
+        email varchar(45) DEFAULT NULL,
+        instructor_detail_id int DEFAULT NULL,
+        PRIMARY KEY (id),
+        KEY PK_DETAIL_ID(instructor_detail_id),
+        CONSTRAINT PK_DETAIL FOREIGN KEY(instructor_detail_id),
+        REFERENCES instructor_detail (id) ON DELETE NO UPDATE NO ACTION
+)AUTO_INCREMENT=1, DEFAULT CHARSET=utf8;
+
+
+INSERT INTO instructor VALUES (1, 'John', 'Doe', 'john.doe@gmail.com', 1);
+INSERT INTO instructor VALUES (2, 'Jane', 'Smith', 'jane.smith@gmail.com', 2);
+INSERT INTO instructor VALUES (3, 'Michael', 'Brown', 'michael.brown@gmail.com', 3);
+INSERT INTO instructor VALUES (4, 'Emily', 'Davis', 'emily.davis@gmail.com', 4);
+INSERT INTO instructor VALUES (5, 'David', 'Wilson', 'david.wilson@gmail.com', 5);
+
+
+
+INSERT INTO instructor_detail VALUES (1, 'TechTalks', 'Photography');
+INSERT INTO instructor_detail VALUES (2, 'CodeMasters', 'Gaming');
+INSERT INTO instructor_detail VALUES (3, 'LearnAndGrow', 'Traveling');
+INSERT INTO instructor_detail VALUES (4, 'AIInsights', 'Cooking');
+INSERT INTO instructor_detail VALUES (5, 'DataDive', 'Cycling');
+
