@@ -4,7 +4,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import sk.kasv.robert.hibernate.DAO.AppDAO;
 import sk.kasv.robert.hibernate.DAO.StudentDAO;
+import sk.kasv.robert.hibernate.Entity.Instructor;
+import sk.kasv.robert.hibernate.Entity.InstructorDetail;
 import sk.kasv.robert.hibernate.Entity.Student;
 import java.util.List;
 @SpringBootApplication
@@ -17,14 +20,33 @@ public class HibernateApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
 		return runner -> {
-			System.out.println("App starting");
+			System.out.println("Student DAO App starting");
 			//createStudent(studentDAO);
 			//readStudent(studentDAO);
 			//updateStudent(studentDAO);
 			//readStudent(studentDAO);
 		};
 	}
+	@Bean
+	public CommandLineRunner commandLineRunner2(AppDAO appDAO) {
+		return runner -> {
+			System.out.println(" App DAO starting");
+			queryForInstructor(appDAO);
+		};
+	}
 
+	private void queryForInstructor (AppDAO appDAO){
+		int theId=1;
+		System.out.println("Querry for instructor");
+		Instructor instructor = appDAO.instructorFindByID(theId);
+		System.out.println(instructor);
+		System.out.println(instructor.getInstructorDetail());
+	}
+
+	private static void createInstructor(AppDAO appDAO){
+		Instructor tempInstructor = new Instructor("Jozef","Mak","jozef.mak@gmail.com");
+		InstructorDetail detail = new InstructorDetail("Database","Reading");
+	}
 
 
 	private void createStudent(StudentDAO studentDAO) {

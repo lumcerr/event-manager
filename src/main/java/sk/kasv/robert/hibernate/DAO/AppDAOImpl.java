@@ -8,7 +8,7 @@ import sk.kasv.robert.hibernate.Entity.Instructor;
 
 @Repository
 public class AppDAOImpl implements AppDAO{
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
     @Autowired
     public AppDAOImpl(EntityManager entityManager){
         this.entityManager=entityManager;
@@ -16,6 +16,13 @@ public class AppDAOImpl implements AppDAO{
     @Override
     @Transactional
     public void save(Instructor theInstructor) {
-
+        entityManager.persist(theInstructor);
     }
+
+    @Override
+    public Instructor instructorFindByID(int theId) {
+        return entityManager.find(Instructor.class,theId);
+    }
+
+
 }
