@@ -12,4 +12,6 @@ public interface AppDAO {
    public Instructor findByLastName(String name);
 
     public List<Instructor> findByEmail(String mail);
+
+    Instructor instructorFindByID(int theId);
 }

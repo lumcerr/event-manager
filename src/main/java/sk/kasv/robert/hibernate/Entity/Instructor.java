@@ -1,7 +1,8 @@
 package sk.kasv.robert.hibernate.Entity;
 
 import jakarta.persistence.*;
-
+@Entity
+@Table(name = "instructor")
 public class Instructor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +56,7 @@ public class Instructor {
         this.lastName = lastName;
         this.email = email;
     }
+
     @Override
     public String toString() {
         return "Instructor{" +
@@ -62,7 +64,7 @@ public class Instructor {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", instructor_detail_id=" + instructorDetail +
+                ", instructorDetail=" + instructorDetail +
                 '}';
     }
 }

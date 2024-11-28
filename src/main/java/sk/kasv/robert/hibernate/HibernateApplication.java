@@ -38,7 +38,7 @@ public class HibernateApplication {
 	private void queryForInstructor (AppDAO appDAO){
 		int theId=1;
 		System.out.println("Querry for instructor");
-		Instructor instructor = appDAO.findById(theId);
+		Instructor instructor = appDAO.instructorFindByID(theId);
 		System.out.println(instructor);
 		System.out.println(instructor.getInstructorDetail());
 	}
@@ -47,7 +47,6 @@ public class HibernateApplication {
 		Instructor tempInstructor = new Instructor("Jozef","Mak","jozef.mak@gmail.com");
 		InstructorDetail detail = new InstructorDetail("Database","Reading");
 	}
-
 
 	private void createStudent(StudentDAO studentDAO) {
 		System.out.println("Creating a new student object...");

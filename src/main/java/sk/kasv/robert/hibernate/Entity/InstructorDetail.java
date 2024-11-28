@@ -1,10 +1,9 @@
 package sk.kasv.robert.hibernate.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "instructor_detail")
 public class InstructorDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +32,14 @@ public class InstructorDetail {
     public InstructorDetail(String youtube,String hobbies){
         this.youtube=youtube;
         this.hobbies=hobbies;
+    }
+
+    @Override
+    public String toString() {
+        return "InstructorDetail{" +
+                "id=" + id +
+                ", youtube='" + youtube + '\'' +
+                ", hobbies='" + hobbies + '\'' +
+                '}';
     }
 }
