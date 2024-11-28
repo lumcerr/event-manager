@@ -38,7 +38,7 @@ public class HibernateApplication {
 	private void queryForInstructor (AppDAO appDAO){
 		int theId=1;
 		System.out.println("Querry for instructor");
-		Instructor instructor = appDAO.instructorFindByID(theId);
+		Instructor instructor = appDAO.findById(theId);
 		System.out.println(instructor);
 		System.out.println(instructor.getInstructorDetail());
 	}

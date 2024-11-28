@@ -38,17 +38,17 @@ CREATE TABLE instructor_detail(
 
 DROP TABLE IF EXISTS instructor;
 
-CREATE TABLE instructor(
+CREATE TABLE instructor (
     id int NOT NULL AUTO_INCREMENT,
-        first_name varchar(45) DEFAULT NULL,
-        last_name varchar(45) DEFAULT NULL,
-        email varchar(45) DEFAULT NULL,
-        instructor_detail_id int DEFAULT NULL,
-        PRIMARY KEY (id),
-        KEY PK_DETAIL_ID(instructor_detail_id),
-        CONSTRAINT PK_DETAIL FOREIGN KEY(instructor_detail_id),
-        REFERENCES instructor_detail (id) ON DELETE NO UPDATE NO ACTION
-)AUTO_INCREMENT=1, DEFAULT CHARSET=utf8;
+    first_name VARCHAR(45) DEFAULT NULL,
+    last_name VARCHAR(45) DEFAULT NULL,
+    email VARCHAR(45) DEFAULT NULL,
+    instructor_detail_id int DEFAULT NULL,
+    PRIMARY KEY (id),
+    KEY FK_DETAIL_idx (instructor_detail_id),
+    CONSTRAINT FK_DETAIL FOREIGN KEY (instructor_detail_id)
+    REFERENCES instructor_detail (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+) AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
 
 
 INSERT INTO instructor VALUES (1, 'John', 'Doe', 'john.doe@gmail.com', 1);
