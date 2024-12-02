@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import sk.kasv.robert.hibernate.DAO.AppDAO;
 import sk.kasv.robert.hibernate.DAO.StudentDAO;
 import sk.kasv.robert.hibernate.Entity.Instructor;
-import sk.kasv.robert.hibernate.Entity.InstructorDetail;
+import sk.kasv.robert.hibernate.Entity.Instructor_id;
 import sk.kasv.robert.hibernate.Entity.Student;
 import java.util.List;
 @SpringBootApplication
@@ -45,7 +45,7 @@ public class HibernateApplication {
 
 	private static void createInstructor(AppDAO appDAO){
 		Instructor tempInstructor = new Instructor("Jozef","Mak","jozef.mak@gmail.com");
-		InstructorDetail detail = new InstructorDetail("Database","Reading");
+		Instructor_id detail = new Instructor_id("Database","Reading");
 	}
 
 	private void createStudent(StudentDAO studentDAO) {

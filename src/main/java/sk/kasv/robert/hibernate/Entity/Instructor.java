@@ -16,7 +16,7 @@ public class Instructor {
     private String email;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_detail_id")
-    private InstructorDetail instructorDetail;
+    private Instructor_id instructorId;
     //----------------------------------------Getters----------------------------------
     public int getId() {
         return id;
@@ -31,8 +31,8 @@ public class Instructor {
     public String getEmail() {
         return email;
     }
-    public InstructorDetail getInstructorDetail() {
-        return instructorDetail;
+    public Instructor_id getInstructorDetail() {
+        return instructorId;
     }
     //----------------------------------------Setters----------------------------------
     public void setFirstName(String firstName) {
@@ -45,8 +45,8 @@ public class Instructor {
         this.email = email;
     }
 
-    public void setInstructorDetail(InstructorDetail instructorDetail) {
-        this.instructorDetail = instructorDetail;
+    public void setInstructorDetail(Instructor_id instructorId) {
+        this.instructorId = instructorId;
     }
 
 
@@ -64,7 +64,7 @@ public class Instructor {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", instructorDetail=" + instructorDetail +
+                ", instructorDetail=" + instructorId +
                 '}';
     }
 }

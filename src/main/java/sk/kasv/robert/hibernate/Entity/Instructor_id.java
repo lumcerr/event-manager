@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "instructor_detail")
-public class InstructorDetail {
+public class Instructor_id {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,8 +28,8 @@ public class InstructorDetail {
 
 
 
-    public InstructorDetail(){}
-    public InstructorDetail(String youtube,String hobbies){
+    public Instructor_id(){}
+    public Instructor_id(String youtube, String hobbies){
         this.youtube=youtube;
         this.hobbies=hobbies;
     }

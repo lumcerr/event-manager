@@ -52,18 +52,18 @@ CREATE TABLE instructor (
 
 DROP TABLE IF EXISTS course;
 
-CREATE TABLE course (
+CREATE TABLE IF NOT EXISTS course (
     id int NOT NULL AUTO_INCREMENT,
     title VARCHAR(128) DEFAULT NULL,
     instructor_id int DEFAULT NULL,
     PRIMARY KEY (id),
-    UNIQUE TITLE_UNIQUE (title),
-    KEY FK_INSTRUCTOR_ID (instructor_id),
-
+    UNIQUE KEY TITLE_UNIQUE (title),
+    KEY FK_INSTRUCTOR_idx (instructor_id),
     CONSTRAINT FK_INSTRUCTOR
     FOREIGN KEY (instructor_id)
-    REFERENCES instructor(id)
-    )AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+    REFERENCES instructor (id)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+) AUTO_INCREMENT=10 DEFAULT CHARSET=UTF8
 
 INSERT INTO instructor VALUES (1, 'John', 'Doe', 'john.doe@gmail.com', 1);
 INSERT INTO instructor VALUES (2, 'Jane', 'Smith', 'jane.smith@gmail.com', 2);

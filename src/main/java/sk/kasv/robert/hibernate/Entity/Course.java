@@ -1,10 +1,13 @@
 package sk.kasv.robert.hibernate.Entity;
 
 import jakarta.persistence.*;
+
+import java.util.List;
+
 @Entity
 @Table(name = "course")
 public class Course {
-
+    List<Course> list;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,17 +31,17 @@ public class Course {
         this.title = title;
     }
 
-    public InstructorDetail getInstructorDetail() {
-        return instructorDetail;
+    public Instructor_id getInstructor_Id() {
+        return instructor_Id;
     }
 
-    public void setInstructorDetail(InstructorDetail instructorDetail) {
-        this.instructorDetail = instructorDetail;
+    public void setInstructor_Id(Instructor_id instructor_Id) {
+        this.instructor_Id = instructor_Id;
     }
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_id")
-    private InstructorDetail instructorDetail;
+    private Instructor_id instructor_Id;
 
     public Course(){}
     public Course(String title){
