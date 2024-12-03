@@ -6,8 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import sk.kasv.robert.hibernate.DAO.AppDAO;
 import sk.kasv.robert.hibernate.DAO.StudentDAO;
+import sk.kasv.robert.hibernate.Entity.Course;
 import sk.kasv.robert.hibernate.Entity.Instructor;
-import sk.kasv.robert.hibernate.Entity.Instructor_id;
+import sk.kasv.robert.hibernate.Entity.Instructor_Detail;
 import sk.kasv.robert.hibernate.Entity.Student;
 import java.util.List;
 @SpringBootApplication
@@ -34,7 +35,18 @@ public class HibernateApplication {
 			queryForInstructor(appDAO);
 		};
 	}
+	private void  createInstructorCourses(AppDAO appDAO) {
+		Instructor tempInstructor =
+				new Instructor("Marek","baran","marek.baran@gmail.com");
+		Instructor_Detail detail = new Instructor_Detail("Youtube","books");
+		tempInstructor.setInstructorDetail(detail);
 
+		Course course = new Course("UX design");
+		Course course2 = new Course("Linux");
+
+		tempInstructor.add(course);
+		tempInstructor.add(course2);
+	}
 	private void queryForInstructor (AppDAO appDAO){
 		int theId=1;
 		System.out.println("Querry for instructor");
@@ -45,7 +57,7 @@ public class HibernateApplication {
 
 	private static void createInstructor(AppDAO appDAO){
 		Instructor tempInstructor = new Instructor("Jozef","Mak","jozef.mak@gmail.com");
-		Instructor_id detail = new Instructor_id("Database","Reading");
+		Instructor_Detail detail = new Instructor_Detail("Database","Reading");
 	}
 
 	private void createStudent(StudentDAO studentDAO) {

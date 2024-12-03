@@ -1,5 +1,6 @@
 package sk.kasv.robert.hibernate.DAO;
 
+import sk.kasv.robert.hibernate.Entity.Course;
 import sk.kasv.robert.hibernate.Entity.Instructor;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface AppDAO {
     public List<Instructor> findByEmail(String mail);
 
     Instructor instructorFindByID(int theId);
+
+    Course findCourseByTitle(String title);
 }

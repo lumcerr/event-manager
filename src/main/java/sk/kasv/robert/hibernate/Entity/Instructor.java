@@ -1,6 +1,9 @@
 package sk.kasv.robert.hibernate.Entity;
 
 import jakarta.persistence.*;
+
+import java.util.List;
+
 @Entity
 @Table(name = "instructor")
 public class Instructor {
@@ -16,7 +19,7 @@ public class Instructor {
     private String email;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_detail_id")
-    private Instructor_id instructorId;
+    private Instructor_Detail instructorId;
     //----------------------------------------Getters----------------------------------
     public int getId() {
         return id;
@@ -31,7 +34,7 @@ public class Instructor {
     public String getEmail() {
         return email;
     }
-    public Instructor_id getInstructorDetail() {
+    public Instructor_Detail getInstructorDetail() {
         return instructorId;
     }
     //----------------------------------------Setters----------------------------------
@@ -45,10 +48,11 @@ public class Instructor {
         this.email = email;
     }
 
-    public void setInstructorDetail(Instructor_id instructorId) {
+    public void setInstructorDetail(Instructor_Detail instructorId) {
         this.instructorId = instructorId;
     }
-
+    @OneToMany(mappedBy = "instructor",fetch = FetchType.EAGER, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    private List<Course> courses;
 
     public Instructor(){};
     public  Instructor(String firstName, String lastName, String email){
@@ -66,5 +70,9 @@ public class Instructor {
                 ", email='" + email + '\'' +
                 ", instructorDetail=" + instructorId +
                 '}';
+    }
+
+    public void add(Course course) {
+
     }
 }

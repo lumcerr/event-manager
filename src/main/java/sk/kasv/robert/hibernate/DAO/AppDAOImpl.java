@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import sk.kasv.robert.hibernate.Entity.Course;
 import sk.kasv.robert.hibernate.Entity.Instructor;
 
 import java.util.List;
@@ -39,6 +40,11 @@ public class AppDAOImpl implements AppDAO{
     @Override
     public Instructor instructorFindByID(int theId) {
         return entityManager.find(Instructor.class,theId);
+    }
+
+    @Override
+    public Course findCourseByTitle(String title) {
+        return entityManager.find(Course.class,title);
     }
 
 
