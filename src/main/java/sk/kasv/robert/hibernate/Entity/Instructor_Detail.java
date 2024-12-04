@@ -9,6 +9,15 @@ public class Instructor_Detail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
+    public void setYoutube(String youtube) {
+        this.youtube = youtube;
+    }
+
+    public void setHobbies(String hobbies) {
+        this.hobbies = hobbies;
+    }
+
     @Column(name = "youtube_channel")
     private String youtube;
     @Column(name = "hobby")

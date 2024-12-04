@@ -45,6 +45,7 @@ public class Course {
 
     public Course(String title) {
         this.title = title;
+
     }
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "Instructor_Id")

@@ -32,7 +32,9 @@ public class HibernateApplication {
 	public CommandLineRunner commandLineRunner2(AppDAO appDAO) {
 		return runner -> {
 			System.out.println(" App DAO starting");
-			queryForInstructor(appDAO);
+			//queryForInstructor(appDAO);
+			updateInstructor(appDAO);
+			appDAO.findById(2);
 		};
 	}
 	private void  createInstructorCourses(AppDAO appDAO) {
@@ -100,6 +102,20 @@ public class HibernateApplication {
 		theStudent.setEmail("lover.d@gmail.com");
 		studentDAO.update(theStudent);
 		System.out.println("Student successfully updated: "+theStudent);
+	}
+
+	private  void  updateInstructor (AppDAO appDAO){
+		Instructor instructor = appDAO.findById(2);
+		instructor.setFirstName("janko");
+		instructor.setLastName("Hrasko");
+		instructor.setEmail("janko.hrasko@gmail.com");
+		Instructor_Detail id= instructor.getInstructorDetail();
+		id.setHobbies("books");
+		id.setYoutube("jankoHraskoyoutube.com");
+
+		Course course = new Course();
+		course.setInstructor_Id();
+		course.setTitle("Linux");
 	}
 
 }
