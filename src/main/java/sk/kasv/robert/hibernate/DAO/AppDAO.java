@@ -6,15 +6,19 @@ import sk.kasv.robert.hibernate.Entity.Instructor;
 import java.util.List;
 
 public interface AppDAO {
-    public void save (Instructor theInstructor);
+    public void save(Instructor instructor);
 
-    Instructor findById(int theId);
+    public Instructor findById(int id);
 
-   public Instructor findByLastName(String name);
+    public Instructor findByLastName(String name);
 
     public List<Instructor> findByEmail(String mail);
 
-    Instructor instructorFindByID(int theId);
+    public boolean deleteById(int id);
 
-    Course findCourseByTitle(String title);
+    Course findByTitle(String title);
+
+    public void update(Instructor instructor);
+
+    public void saveInstructorWithCourses(Instructor instructor, List<Course> courses);
 }

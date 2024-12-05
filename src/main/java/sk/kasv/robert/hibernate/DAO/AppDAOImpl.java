@@ -1,6 +1,7 @@
 package sk.kasv.robert.hibernate.DAO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,12 +11,15 @@ import sk.kasv.robert.hibernate.Entity.Instructor;
 import java.util.List;
 
 @Repository
-public class AppDAOImpl implements AppDAO{
-    private final EntityManager entityManager;
+public class AppDAOImpl implements AppDAO {
+
+    private EntityManager entityManager;
+
     @Autowired
-    public AppDAOImpl(EntityManager entityManager){
-        this.entityManager=entityManager;
+    public AppDAOImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
+
     @Override
     @Transactional
     public void save(Instructor theInstructor) {
@@ -23,29 +27,58 @@ public class AppDAOImpl implements AppDAO{
     }
 
     @Override
-    public Instructor findById(int theId) {
-        return null;
+    @Transactional
+    public Instructor findById(int id) {
+        return entityManager.find(Instructor.class, id);
     }
 
     @Override
+    @Transactional
     public Instructor findByLastName(String name) {
-        return null;
+        return entityManager.find(Instructor.class, name);
     }
 
     @Override
+    @Transactional
     public List<Instructor> findByEmail(String mail) {
-        return null;
+        TypedQuery<Instructor> theQuery = entityManager.createQuery("FROM Instructor WHERE email LIKE :theData", Instructor.class);
+        theQuery.setParameter("theData", mail);
+
+        return theQuery.getResultList();
     }
 
     @Override
-    public Instructor instructorFindByID(int theId) {
-        return entityManager.find(Instructor.class,theId);
+    public boolean deleteById(int id) {
+        if (entityManager.find(Instructor.class, id) != null) {
+            TypedQuery<Instructor> theQuery = entityManager.createQuery("DELETE FROM Instructor WHERE id =:theData", Instructor.class);
+            theQuery.setParameter("theData", id);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public Course findCourseByTitle(String title) {
-        return entityManager.find(Course.class,title);
+    public void update(Instructor instructor) {
+        entityManager.merge(instructor);
     }
 
+    @Override
+    @Transactional
+    public void saveInstructorWithCourses(Instructor instructor, List<Course> courses) {
+        instructor.setCourses(courses);
+        entityManager.persist(instructor);
+    }
 
+    @Override
+    public Course findByTitle(String title) {
+        if (entityManager.createQuery("FROM Course WHERE title LIKE :title", Course.class)
+                .setParameter("title", title)
+                .getResultList().isEmpty()) {
+            System.out.println("Course with title " + title + " does not exist.");
+            return null;
+        }
+        return entityManager.createQuery("FROM Course WHERE title LIKE :title", Course.class)
+                .setParameter("title", title)
+                .getSingleResult();
+    }
 }

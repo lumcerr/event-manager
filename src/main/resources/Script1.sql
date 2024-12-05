@@ -65,6 +65,23 @@ CREATE TABLE IF NOT EXISTS course (
     ON DELETE NO ACTION ON UPDATE NO ACTION
 ) AUTO_INCREMENT=10 DEFAULT CHARSET=UTF8
 
+DROP TABLE IF EXISTS review;
+CREATE TABLE review (
+    id int NOT NULL AUTO_INCREMENT,
+    comment varchar(256) DEFAULT NULL,
+    course_id int DEFAULT NULL,
+
+    PRIMARY KEY (id)
+
+    KEY FK_COURSE_ID_id (course_id),
+
+    CONSTRAINT FK_COURSE
+    FOREIGN_KEY (course_id)
+    REFERENCES course (id)
+
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+) AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+
 INSERT INTO instructor VALUES (1, 'John', 'Doe', 'john.doe@gmail.com', 1);
 INSERT INTO instructor VALUES (2, 'Jane', 'Smith', 'jane.smith@gmail.com', 2);
 INSERT INTO instructor VALUES (3, 'Michael', 'Brown', 'michael.brown@gmail.com', 3);

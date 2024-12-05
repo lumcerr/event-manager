@@ -1,0 +1,18 @@
+-Create Entity Review, SQL for review ()
+
+DROP TABLE IF EXISTS review;
+CREATE TABLE review (
+    id int NOT NULL AUTO_INCREMENT,
+    comment varchar(256) DEFAULT NULL,
+    course_id int DEFAULT NULL,
+
+    PRIMARY KEY (id)
+
+    KEY FK_COURSE_ID_id (course_id),
+
+    CONSTRAINT FK_COURSE
+    FOREIGN_KEY (course_id)
+    REFERENCES course (id)
+
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+) AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
