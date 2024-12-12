@@ -2,7 +2,7 @@ package sk.kasv.robert.hibernate.Entity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.ArrayList.*;
+import java.util.List;
 
 @Entity
 @Table(name = "course")
@@ -53,6 +53,7 @@ public class Course {
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 
+
    /* public void addReview(Review review){
         if (review==null) {
             review= new ArrayList<>();
@@ -61,4 +62,8 @@ public class Course {
         review.add(review);
 
     }*/
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
+    @JoinTable(name = "student_course", joinColumns = @JoinColumn(name =  "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> courses;
 }

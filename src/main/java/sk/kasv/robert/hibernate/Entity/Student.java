@@ -3,6 +3,7 @@ package sk.kasv.robert.hibernate.Entity;
 import jakarta.persistence.*;
 import sk.kasv.robert.hibernate.DAO.StudentDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -85,4 +86,22 @@ public class Student {
 
     private void readStudent(StudentDAO studentDAO){}
     private void createStudent(StudentDAO studentDAO){}
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
+    @JoinTable(name = "student_course", joinColumns = @JoinColumn(name =  "course_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private List<Course> courses;
+
+    public void addCourse(Course course) {
+        if (course == null) {
+            return;
+        }
+        if (courses == null) {
+            courses = new ArrayList<>();
+        }
+        courses.add(course);
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
 }
