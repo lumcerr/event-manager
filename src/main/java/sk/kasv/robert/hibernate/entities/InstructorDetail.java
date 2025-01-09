@@ -1,4 +1,4 @@
-package sk.kasv.robert.hibernate.Entity;
+package sk.kasv.robert.hibernate.entities;
 
 import jakarta.persistence.*;
 

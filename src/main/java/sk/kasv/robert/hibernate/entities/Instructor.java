@@ -1,4 +1,4 @@
-package sk.kasv.robert.hibernate.Entity;
+package sk.kasv.robert.hibernate.entities;
 
 import jakarta.persistence.*;
 
@@ -27,7 +27,7 @@ public class Instructor {
     private String email;
 
     @OneToMany(mappedBy = "instructor",fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    private List<Course> courses;
+    private List<Course> courses = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_detail_id")
@@ -83,7 +83,7 @@ public class Instructor {
     }
 
     public void add(Course course) {
-        if(course==null) {
+        if(courses == null) {
             courses = new ArrayList<>();
         }
         course.setInstructor(this);

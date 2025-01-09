@@ -3,10 +3,11 @@ package sk.kasv.robert.hibernate.DAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+//import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import sk.kasv.robert.hibernate.Entity.Course;
-import sk.kasv.robert.hibernate.Entity.Instructor;
+import sk.kasv.robert.hibernate.entities.*;
+import org.hibernate.Session;
 
 import java.util.List;
 
@@ -24,6 +25,24 @@ public class AppDAOImpl implements AppDAO {
     @Transactional
     public void save(Instructor theInstructor) {
         entityManager.persist(theInstructor);
+    }
+
+    @Override
+    @Transactional
+    public void save(Review review) {
+        entityManager.persist(review);
+    }
+
+    @Override
+    @Transactional
+    public void save(Course course) {
+        entityManager.persist(course);
+    }
+
+    @Override
+    @Transactional
+    public void update(Course course) {
+        entityManager.merge(course);
     }
 
     @Override
@@ -64,9 +83,25 @@ public class AppDAOImpl implements AppDAO {
 
     @Override
     @Transactional
+    public void remove(Course course) {
+        Course managedCourse = entityManager.find(Course.class, course.getId());
+        if (managedCourse != null) {
+            entityManager.remove(managedCourse);
+        }
+    }
+
+    @Override
+    @Transactional
     public void saveInstructorWithCourses(Instructor instructor, List<Course> courses) {
         instructor.setCourses(courses);
         entityManager.persist(instructor);
+    }
+
+    @Override
+    public List<Review> getAllReviewsByCourseId(int courseId) {
+        TypedQuery<Review> theQuery = entityManager.createQuery("FROM Review WHERE course_id =:theData", Review.class);
+        theQuery.setParameter("theData", courseId);
+        return theQuery.getResultList();
     }
 
     @Override
@@ -81,4 +116,26 @@ public class AppDAOImpl implements AppDAO {
                 .setParameter("title", title)
                 .getSingleResult();
     }
+
+    @Override
+    public Course findCourseById(int id) {
+        TypedQuery<Course> theQuery = entityManager.createQuery("FROM Course WHERE id =:theData", Course.class);
+        theQuery.setParameter("theData", id);
+        return theQuery.getSingleResult();
+    }
+
+    @Override
+    public Course findCourseByName(String name) {
+        TypedQuery<Course> theQuery = entityManager.createQuery("FROM Course WHERE title=:theData", Course.class);
+        theQuery.setParameter("theData", name);
+        return theQuery.getSingleResult();
+    }
+
+    @Override
+    public List<Course> getAllCourses() {
+        TypedQuery<Course> theQuery = entityManager.createQuery("FROM Course", Course.class);
+        return theQuery.getResultList();
+    }
+
+
 }

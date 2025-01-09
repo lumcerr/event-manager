@@ -1,7 +1,7 @@
-package sk.kasv.robert.hibernate.Entity;
+package sk.kasv.robert.hibernate.entities;
 
 import jakarta.persistence.*;
-import sk.kasv.robert.hibernate.DAO.StudentDAO;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class Student {
         return firstName;
     }
 
-   public String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
@@ -58,37 +58,21 @@ public class Student {
 
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
     public Student(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
-    private void queryForStudentsByLastName(StudentDAO studentDAO){
-        List<Student> theStudents= studentDAO.findByLastName("novak");
-        for(Student student:theStudents)
-         System.out.println(student);
-    }
-    private void queryForStudents(StudentDAO studentDAO){
-        List<Student> theStudents = studentDAO.findAll();
-        for (Student student:theStudents)
-            System.out.println(student);
+
+    @Override
+    public String toString() {
+        return id + " " + firstName + " " + lastName + " " + email;
     }
 
-    private void readStudent(StudentDAO studentDAO){}
-    private void createStudent(StudentDAO studentDAO){}
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
-    @JoinTable(name = "student_course", joinColumns = @JoinColumn(name =  "course_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}/*{CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE}*/)
+    @JoinTable(name = "course_student",
+            joinColumns = @JoinColumn(name =  "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<Course> courses;
 
     public void addCourse(Course course) {
@@ -98,7 +82,15 @@ public class Student {
         if (courses == null) {
             courses = new ArrayList<>();
         }
-        courses.add(course);
+        if (!courses.contains(course)) {
+            courses.add(course);
+            //course.add(this);
+        }
+
+    }
+
+    public void remove(Course course) {
+        courses.remove(course);
     }
 
     public List<Course> getCourses() {

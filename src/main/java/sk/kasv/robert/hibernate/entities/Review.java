@@ -1,20 +1,20 @@
-package sk.kasv.robert.hibernate.Entity;
+package sk.kasv.robert.hibernate.entities;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "review")
 public class Review {
-
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "comment")
+    @Column(name = "comment_i")
     private String comment;
+
+    @Column(name = "course_id")
+    private int course_id;
 
     public int getId() {
         return id;
@@ -40,17 +40,14 @@ public class Review {
         this.course_id = course_id;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "course_id")
-    private int course_id;
+    public Review() {
 
-    private  Review(){}
-    public Review(int id, String comment, int course_id){
-        this.id=id;
-        this.comment=comment;
-        this.course_id=course_id;
-        
+    }
+
+    public Review(int id, String comment, int course_id) {
+        this.id = id;
+        this.comment = comment;
+        this.course_id = course_id;
     }
 
     @Override
@@ -60,9 +57,5 @@ public class Review {
                 ", comment='" + comment + '\'' +
                 ", course_id=" + course_id +
                 '}';
-    }
-
-
-    public void add(Review review) {
     }
 }
