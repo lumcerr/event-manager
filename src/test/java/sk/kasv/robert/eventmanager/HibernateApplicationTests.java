@@ -1,4 +1,4 @@
-package sk.kasv.robert.hibernate;
+package sk.kasv.robert.eventmanager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
