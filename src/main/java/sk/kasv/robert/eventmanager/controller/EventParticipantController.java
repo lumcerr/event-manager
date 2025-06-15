@@ -15,7 +15,6 @@ public class EventParticipantController {
 
     private final EventParticipantService eventParticipantService;
 
-    // Constructor injection for EventParticipantService dependency
     public EventParticipantController(EventParticipantService eventParticipantService) {
         this.eventParticipantService = eventParticipantService;
     }

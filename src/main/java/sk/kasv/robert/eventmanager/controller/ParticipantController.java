@@ -15,7 +15,6 @@ public class ParticipantController {
 
     private final ParticipantService participantService;
 
-    // Constructor injection of ParticipantService
     public ParticipantController(ParticipantService participantService) {
         this.participantService = participantService;
     }
