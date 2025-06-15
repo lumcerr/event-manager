@@ -1,8 +1,8 @@
 package sk.kasv.robert.eventmanager.service;
 
-import org.springframework.stereotype.Service;
 import sk.kasv.robert.eventmanager.entity.User;
 import sk.kasv.robert.eventmanager.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,37 +10,49 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepo;
+    private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepo) {
-        this.userRepo = userRepo;
+    // Constructor injection (recommended by Spring)
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
+    // Create a new user
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    // Retrieve all users
     public List<User> getAllUsers() {
-        return userRepo.findAll();
+        return userRepository.findAll();
     }
 
+    // Find a user by ID
     public Optional<User> getUserById(Long id) {
-        return userRepo.findById(id);
+        return userRepository.findById(id);
     }
 
-    public User saveUser(User user) {
-        return userRepo.save(user);
+    // Find a user by email
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
-    public User updateUser(Long id, User userDetails) {
-        return userRepo.findById(id).map(user -> {
-            user.setName(userDetails.getName());
-            user.setEmail(userDetails.getEmail());
-            return userRepo.save(user);
-        }).orElse(null);
+    // Search users by name (case-insensitive, partial match)
+    public List<User> searchUsersByName(String name) {
+        return userRepository.findByNameContainingIgnoreCase(name);
     }
 
-    public boolean deleteUser(Long id) {
-        if (!userRepo.existsById(id)) {
-            return false;
-        }
-        userRepo.deleteById(id);
-        return true;
+    // Update existing user
+    public Optional<User> updateUser(Long id, User updatedUser) {
+        return userRepository.findById(id).map(user -> {
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
+            return userRepository.save(user);
+        });
+    }
+
+    // Delete a user by ID
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

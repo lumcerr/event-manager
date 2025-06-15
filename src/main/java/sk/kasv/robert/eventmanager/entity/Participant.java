@@ -1,77 +1,57 @@
 package sk.kasv.robert.eventmanager.entity;
-
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Participant {
 
-    @EmbeddedId
-    private ParticipantId id = new ParticipantId();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String fullName;
+    private String email;
 
-    @ManyToOne
-    @MapsId("eventId")
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    private List<EventParticipant> eventParticipants;
 
-    private LocalDateTime registrationDate;
-    private boolean confirmed;
-
+    // Default constructor
     public Participant() {}
 
-    public Participant(User user, Event event, LocalDateTime registrationDate, boolean confirmed) {
-        this.user = user;
-        this.event = event;
-        this.registrationDate = registrationDate;
-        this.confirmed = confirmed;
-        this.id = new ParticipantId(user.getId(), event.getId());
+    // Parameterized constructor
+    public Participant(String fullName, String email) {
+        this.fullName = fullName;
+        this.email = email;
     }
 
     // Getters and Setters
 
-    public ParticipantId getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(ParticipantId id) {
-        this.id = id;
+
+    public String getFullName() {
+        return fullName;
     }
 
-    public User getUser() {
-        return user;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public String getEmail() {
+        return email;
     }
 
-    public Event getEvent() {
-        return event;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public List<EventParticipant> getEventParticipants() {
+        return eventParticipants;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public void setEventParticipants(List<EventParticipant> eventParticipants) {
+        this.eventParticipants = eventParticipants;
     }
 }

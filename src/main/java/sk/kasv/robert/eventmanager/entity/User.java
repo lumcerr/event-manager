@@ -1,10 +1,10 @@
 package sk.kasv.robert.eventmanager.entity;
-
 import jakarta.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,18 +12,23 @@ public class User {
     private String name;
     private String email;
 
-    @ManyToMany(mappedBy = "participants")
-    private Set<Event> events;
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
+    private List<Event> events;
 
-    // Getters and setters
+    // Default constructor
+    public User() {}
+
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -41,11 +46,11 @@ public class User {
         this.email = email;
     }
 
-    public Set<Event> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(Set<Event> events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 }

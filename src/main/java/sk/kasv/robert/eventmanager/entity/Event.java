@@ -1,51 +1,61 @@
 package sk.kasv.robert.eventmanager.entity;
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String eventName;
     private String description;
-    private LocalDateTime date;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
+    // Many-to-One: Each event is organized by one user.
+    @ManyToOne
+    @JoinColumn(name = "organizer_id")
+    private User organizer;
+
+    // Many-to-One: Each event belongs to one category.
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
+    // Many-to-One: Each event has one location.
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @ManyToMany
-    @JoinTable(
-            name = "participant",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> participants;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<EventParticipant> eventParticipants;
 
-    // Getters and setters
+    // Default constructor
+    public Event() {}
+
+    public Event(String eventName, String description, LocalDateTime startTime, LocalDateTime endTime) {
+        this.eventName = eventName;
+        this.description = description;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+
+    public String getEventName() {
+        return eventName;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
     public String getDescription() {
@@ -56,12 +66,28 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public User getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(User organizer) {
+        this.organizer = organizer;
     }
 
     public Category getCategory() {
@@ -80,11 +106,11 @@ public class Event {
         this.location = location;
     }
 
-    public Set<User> getParticipants() {
-        return participants;
+    public List<EventParticipant> getEventParticipants() {
+        return eventParticipants;
     }
 
-    public void setParticipants(Set<User> participants) {
-        this.participants = participants;
+    public void setEventParticipants(List<EventParticipant> eventParticipants) {
+        this.eventParticipants = eventParticipants;
     }
 }

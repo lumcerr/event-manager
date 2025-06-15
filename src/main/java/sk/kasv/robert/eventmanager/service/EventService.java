@@ -1,48 +1,75 @@
 package sk.kasv.robert.eventmanager.service;
 
-import org.springframework.stereotype.Service;
 import sk.kasv.robert.eventmanager.entity.Event;
 import sk.kasv.robert.eventmanager.repository.EventRepository;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class EventService {
 
-    private final EventRepository eventRepo;
+    private final EventRepository eventRepository;
 
-    public EventService(EventRepository eventRepo) {
-        this.eventRepo = eventRepo;
+    // Constructor injection
+    public EventService(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
     }
 
+    // Create a new event
+    public Event createEvent(Event event) {
+        return eventRepository.save(event);
+    }
+
+    // Retrieve all events
     public List<Event> getAllEvents() {
-        return eventRepo.findAll();
+        return eventRepository.findAll();
     }
 
+    // Retrieve a single event by ID
     public Optional<Event> getEventById(Long id) {
-        return eventRepo.findById(id);
+        return eventRepository.findById(id);
     }
 
-    public Event saveEvent(Event event) {
-        return eventRepo.save(event);
+    // Retrieve events by category name
+    public List<Event> getEventsByCategory(String categoryName) {
+        return eventRepository.findByCategoryName(categoryName);
     }
 
-    public Event updateEvent(Long id, Event eventDetails) {
-        return eventRepo.findById(id).map(event -> {
-            event.setTitle(eventDetails.getTitle());
-            event.setDate(eventDetails.getDate());
-            event.setCategory(eventDetails.getCategory());
-            event.setLocation(eventDetails.getLocation());
-            return eventRepo.save(event);
-        }).orElse(null);
+    // Retrieve events organized by a specific user (organizer)
+    public List<Event> getEventsByOrganizer(Long organizerId) {
+        return eventRepository.findByOrganizerId(organizerId);
     }
 
-    public boolean deleteEvent(Long id) {
-        if (!eventRepo.existsById(id)) {
-            return false;
-        }
-        eventRepo.deleteById(id);
-        return true;
+    // Retrieve events happening between two dates
+    public List<Event> getEventsBetweenDates(LocalDateTime start, LocalDateTime end) {
+        return eventRepository.findByStartTimeBetween(start, end);
+    }
+
+    // Retrieve events by the city in which they are held
+    public List<Event> getEventsByCity(String city) {
+        return eventRepository.findByLocationCityIgnoreCase(city);
+    }
+
+    // Update an existing event
+    public Optional<Event> updateEvent(Long id, Event updatedEvent) {
+        return eventRepository.findById(id).map(event -> {
+            event.setEventName(updatedEvent.getEventName());
+            event.setDescription(updatedEvent.getDescription());
+            event.setStartTime(updatedEvent.getStartTime());
+            event.setEndTime(updatedEvent.getEndTime());
+            // Optionally, update relationships too:
+            event.setCategory(updatedEvent.getCategory());
+            event.setLocation(updatedEvent.getLocation());
+            event.setOrganizer(updatedEvent.getOrganizer());
+            return eventRepository.save(event);
+        });
+    }
+
+    // Delete an event by ID
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
     }
 }

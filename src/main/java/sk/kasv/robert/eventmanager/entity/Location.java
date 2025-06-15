@@ -1,28 +1,37 @@
 package sk.kasv.robert.eventmanager.entity;
-
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 public class Location {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String address;
     private String city;
-    private String venue;
 
-    @OneToMany(mappedBy = "location")
-    private Set<Event> events;
+    // Default constructor
+    public Location() {}
 
-    // Getters and setters
+    public Location(String address, String city) {
+        this.address = address;
+        this.city = city;
+    }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getCity() {
@@ -31,21 +40,5 @@ public class Location {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
-
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
     }
 }
