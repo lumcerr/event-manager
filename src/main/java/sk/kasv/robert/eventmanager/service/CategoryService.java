@@ -16,32 +16,26 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    // Create new category
     public Category createCategory(Category category) {
         return categoryRepository.save(category);
     }
 
-    // Get all categories
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
-    // Get category by ID
     public Optional<Category> getCategoryById(Long id) {
         return categoryRepository.findById(id);
     }
 
-    // Get category by name
     public Optional<Category> getCategoryByName(String name) {
         return categoryRepository.findByName(name);
     }
 
-    // Check if category with name exists
     public boolean categoryExists(String name) {
         return categoryRepository.existsByName(name);
     }
 
-    // Update existing category
     public Optional<Category> updateCategory(Long id, Category updatedCategory) {
         return categoryRepository.findById(id).map(category -> {
             category.setName(updatedCategory.getName());
@@ -49,7 +43,6 @@ public class CategoryService {
         });
     }
 
-    // Delete category
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
     }

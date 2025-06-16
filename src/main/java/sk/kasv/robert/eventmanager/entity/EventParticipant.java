@@ -20,7 +20,6 @@ public class EventParticipant {
 
     private LocalDateTime registeredAt;
 
-    // Default constructor
     public EventParticipant() {}
 
     public EventParticipant(Event event, Participant participant, LocalDateTime registeredAt) {

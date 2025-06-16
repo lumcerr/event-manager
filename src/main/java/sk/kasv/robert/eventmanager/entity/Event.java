@@ -15,17 +15,14 @@ public class Event {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    // Many-to-One: Each event is organized by one user.
     @ManyToOne
     @JoinColumn(name = "organizer_id")
     private User organizer;
 
-    // Many-to-One: Each event belongs to one category.
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    // Many-to-One: Each event has one location.
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
@@ -33,7 +30,6 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<EventParticipant> eventParticipants;
 
-    // Default constructor
     public Event() {}
 
     public Event(String eventName, String description, LocalDateTime startTime, LocalDateTime endTime) {

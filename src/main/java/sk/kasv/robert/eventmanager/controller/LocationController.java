@@ -19,14 +19,12 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    // GET /api/locations - Retrieve all locations
     @GetMapping
     public ResponseEntity<List<Location>> getAllLocations() {
         List<Location> locations = locationService.getAllLocations();
         return ResponseEntity.ok(locations);
     }
 
-    // GET /api/locations/{id} - Retrieve location by ID
     @GetMapping("/{id}")
     public ResponseEntity<Location> getLocationById(@PathVariable Long id) {
         Optional<Location> locationOptional = locationService.getLocationById(id);
@@ -34,28 +32,24 @@ public class LocationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /api/locations/city?name=xyz - Retrieve locations by city (case-insensitive)
     @GetMapping("/city")
     public ResponseEntity<List<Location>> getLocationsByCity(@RequestParam String name) {
         List<Location> locations = locationService.getLocationsByCity(name);
         return ResponseEntity.ok(locations);
     }
 
-    // GET /api/locations/address?keyword=xyz - Search locations by address keyword (partial, case-insensitive)
     @GetMapping("/address")
     public ResponseEntity<List<Location>> searchLocationsByAddress(@RequestParam String keyword) {
         List<Location> locations = locationService.searchLocationsByAddress(keyword);
         return ResponseEntity.ok(locations);
     }
 
-    // POST /api/locations - Create a new location
     @PostMapping
     public ResponseEntity<Location> createLocation(@RequestBody Location location) {
         Location createdLocation = locationService.createLocation(location);
         return new ResponseEntity<>(createdLocation, HttpStatus.CREATED);
     }
 
-    // PUT /api/locations/{id} - Update an existing location
     @PutMapping("/{id}")
     public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
         Optional<Location> updatedLocation = locationService.updateLocation(id, location);
@@ -63,7 +57,6 @@ public class LocationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE /api/locations/{id} - Delete a location by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);

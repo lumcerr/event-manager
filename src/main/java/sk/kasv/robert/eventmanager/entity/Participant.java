@@ -15,7 +15,6 @@ public class Participant {
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     private List<EventParticipant> eventParticipants;
 
-    // Default constructor
     public Participant() {}
 
     // Parameterized constructor

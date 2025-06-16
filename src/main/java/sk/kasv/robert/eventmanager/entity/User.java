@@ -15,7 +15,6 @@ public class User {
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
     private List<Event> events;
 
-    // Default constructor
     public User() {}
 
     public User(String name, String email) {

@@ -13,13 +13,13 @@ public class eventmanagerApp {
 		SpringApplication.run(eventmanagerApp.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner() {
-		return runner -> {
-
-		};
-	}
+	//*@Bean
+//	public CommandLineRunner commandLineRunner() {
+//		return runner -> {
 //
+	//	};
+	//}
+
 
 
 

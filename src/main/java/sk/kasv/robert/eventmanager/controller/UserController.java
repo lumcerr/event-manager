@@ -19,14 +19,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    // GET /api/users - Retrieve all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    // GET /api/users/{id} - Retrieve a single user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> userOptional = userService.getUserById(id);
@@ -34,21 +32,18 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /api/users/search?name=xyz - Search users by name (partial, case-insensitive)
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchUsersByName(@RequestParam String name) {
         List<User> users = userService.searchUsersByName(name);
         return ResponseEntity.ok(users);
     }
 
-    // POST /api/users - Create a new user
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    // PUT /api/users/{id} - Update an existing user
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         Optional<User> updatedUser = userService.updateUser(id, user);
@@ -56,7 +51,6 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE /api/users/{id} - Delete a user
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);

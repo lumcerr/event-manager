@@ -11,7 +11,6 @@ public class Location {
     private String address;
     private String city;
 
-    // Default constructor
     public Location() {}
 
     public Location(String address, String city) {
