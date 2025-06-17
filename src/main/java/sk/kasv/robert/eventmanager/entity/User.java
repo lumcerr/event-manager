@@ -1,8 +1,10 @@
 package sk.kasv.robert.eventmanager.entity;
+
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "app_user")
 public class User {
 
     @Id
@@ -27,7 +29,6 @@ public class User {
     public Long getId() {
         return id;
     }
-
 
     public String getName() {
         return name;
