@@ -1,22 +1,37 @@
-INSERT INTO app_user (id, name, email) VALUES (1, 'Alice', 'alice@example.com');
-INSERT INTO app_user (id, name, email) VALUES (2, 'Bob', 'bob@example.com');
-INSERT INTO app_user (id, name, email) VALUES (3, 'Charlie', 'charlie@example.com');
+-- USERS
+INSERT INTO app_user (id, name, email) VALUES
+  (1, 'Alice', 'alice@example.com'),
+  (2, 'Bob', 'bob@example.com'),
+  (3, 'Charlie', 'charlie@example.com');
 
-INSERT INTO category (id, name) VALUES (1, 'Concert');
-INSERT INTO category (id, name) VALUES (2, 'Conference');
-INSERT INTO category (id, name) VALUES (3, 'Workshop');
-INSERT INTO category (id, name) VALUES (4, 'Meetup');
+-- CATEGORIES
+INSERT INTO category (id, name) VALUES
+  (1, 'Concert'),
+  (2, 'Conference'),
+  (3, 'Workshop');
 
-INSERT INTO location (id, address, city) VALUES (1, '123 Main St', 'Springfield');
-INSERT INTO location (id, address, city) VALUES (2, '456 Oak Ave', 'Shelbyville');
-INSERT INTO location (id, address, city) VALUES (3, '789 Pine Rd', 'Ogdenville');
-INSERT INTO location (id, address, city) VALUES (4, '321 Cedar Ln', 'North Haverbrook');
+-- LOCATIONS
+INSERT INTO location (id, address, city) VALUES
+  (1, '123 Main St', 'Springfield'),
+  (2, '456 Oak Ave', 'Shelbyville'),
+  (3, '789 Pine Blvd', 'Capital City');
 
-INSERT INTO event (id, event_name, description, start_time, end_time, organizer_id, category_id, location_id)
-VALUES (1, 'Spring Concert', 'A delightful evening of classical music.', '2025-06-20 19:00:00', '2025-06-20 21:00:00', 1, 1, 1);
-INSERT INTO event (id, event_name, description, start_time, end_time, organizer_id, category_id, location_id)
-VALUES (2, 'Tech Conference', 'Annual conference on technology trends and innovation.', '2025-07-15 09:00:00', '2025-07-15 17:00:00', 2, 2, 2);
-INSERT INTO event (id, event_name, description, start_time, end_time, organizer_id, category_id, location_id)
-VALUES (3, 'Creative Workshop', 'Hands-on workshop for creative minds.', '2025-08-05 13:00:00', '2025-08-05 16:00:00', 3, 3, 3);
-INSERT INTO event (id, event_name, description, start_time, end_time, organizer_id, category_id, location_id)
-VALUES (4, 'Neighborhood Meetup', 'Local community meetup for networking and fun.', '2025-09-01 18:00:00', '2025-09-01 20:00:00', 2, 4, 4);
+-- EVENTS
+INSERT INTO event (id, event_name, description, start_time, end_time, organizer_id, category_id, location_id) VALUES
+  (1, 'Spring Concert', 'Live music under the stars', '2025-07-10T18:00:00', '2025-07-10T21:00:00', 1, 1, 1),
+  (2, 'Tech Conference 2025', 'The future of innovation', '2025-08-05T09:00:00', '2025-08-05T17:00:00', 2, 2, 2),
+  (3, 'Creative Writing Workshop', 'Improve your writing craft', '2025-09-12T10:00:00', '2025-09-12T15:00:00', 3, 3, 3);
+
+-- PARTICIPANTS
+INSERT INTO participant (id, full_name, email) VALUES
+  (1, 'Diana Prince', 'diana@example.com'),
+  (2, 'Clark Kent', 'clark@example.com'),
+  (3, 'Bruce Wayne', 'bruce@example.com'),
+  (4, 'Barry Allen', 'barry@example.com');
+
+-- EVENT PARTICIPANTS
+INSERT INTO event_participant (id, event_id, participant_id, registered_at) VALUES
+  (1, 1, 1, '2025-07-01T10:00:00'),
+  (2, 1, 2, '2025-07-01T10:05:00'),
+  (3, 2, 3, '2025-08-01T14:30:00'),
+  (4, 3, 4, '2025-09-01T12:00:00');
