@@ -1,66 +1,85 @@
 package sk.kasv.robert.eventmanager.controller;
 
-import sk.kasv.robert.eventmanager.entity.Participant;
-import sk.kasv.robert.eventmanager.service.ParticipantService;
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import sk.kasv.robert.eventmanager.entity.Participant;
+import sk.kasv.robert.eventmanager.repository.ParticipantRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/participants")
 public class ParticipantController {
 
-    private final ParticipantService participantService;
+    private final ParticipantRepository participantRepository;
 
-    public ParticipantController(ParticipantService participantService) {
-        this.participantService = participantService;
+    public ParticipantController(ParticipantRepository participantRepository) {
+        this.participantRepository = participantRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<Participant>> getAllParticipants() {
-        List<Participant> participants = participantService.getAllParticipants();
-        return ResponseEntity.ok(participants);
+    public List<Participant> getAllParticipants() {
+        return participantRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Participant> getParticipantById(@PathVariable Long id) {
-        Optional<Participant> participantOptional = participantService.getParticipantById(id);
-        return participantOptional.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<Participant>> searchParticipantsByName(@RequestParam String name) {
-        List<Participant> participants = participantService.searchParticipantsByName(name);
-        return ResponseEntity.ok(participants);
-    }
-
-    @GetMapping("/email")
-    public ResponseEntity<Participant> getParticipantByEmail(@RequestParam String email) {
-        Optional<Participant> participantOptional = participantService.getParticipantByEmail(email);
-        return participantOptional.map(ResponseEntity::ok)
+        Optional<Participant> participant = participantRepository.findById(id);
+        return participant.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Participant> createParticipant(@RequestBody Participant participant) {
-        Participant createdParticipant = participantService.createParticipant(participant);
-        return new ResponseEntity<>(createdParticipant, HttpStatus.CREATED);
+    @Operation(
+            summary = "Create a participant",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"fullName\": \"Alice Smith\",\n  \"email\": \"alice.smith@example.com\"\n}")
+                    )
+            )
+    )
+    public ResponseEntity<Participant> createParticipant(@RequestBody Map<String, String> payload) {
+        String fullName = payload.get("fullName");
+        String email = payload.get("email");
+        Participant participant = new Participant();
+        participant.setFullName(fullName);
+        participant.setEmail(email);
+        return ResponseEntity.ok(participantRepository.save(participant));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Participant> updateParticipant(@PathVariable Long id, @RequestBody Participant participant) {
-        Optional<Participant> updatedParticipant = participantService.updateParticipant(id, participant);
-        return updatedParticipant.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @Operation(
+            summary = "Update a participant",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"fullName\": \"Alice S. Updated\",\n  \"email\": \"alice.updated@example.com\"\n}")
+                    )
+            )
+    )
+    public ResponseEntity<Participant> updateParticipant(@PathVariable Long id, @RequestBody Map<String, String> payload) {
+        Optional<Participant> optionalParticipant = participantRepository.findById(id);
+        if (optionalParticipant.isPresent()) {
+            Participant participant = optionalParticipant.get();
+            participant.setFullName(payload.get("fullName"));
+            participant.setEmail(payload.get("email"));
+            return ResponseEntity.ok(participantRepository.save(participant));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
-        participantService.deleteParticipant(id);
-        return ResponseEntity.noContent().build();
+        if (participantRepository.existsById(id)) {
+            participantRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

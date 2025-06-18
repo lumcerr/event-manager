@@ -1,59 +1,114 @@
 package sk.kasv.robert.eventmanager.controller;
 
-import sk.kasv.robert.eventmanager.entity.EventParticipant;
-import sk.kasv.robert.eventmanager.service.EventParticipantService;
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import sk.kasv.robert.eventmanager.entity.EventParticipant;
+import sk.kasv.robert.eventmanager.entity.Event;
+import sk.kasv.robert.eventmanager.entity.Participant;
+import sk.kasv.robert.eventmanager.repository.EventParticipantRepository;
+import sk.kasv.robert.eventmanager.repository.EventRepository;
+import sk.kasv.robert.eventmanager.repository.ParticipantRepository;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/eventParticipants")
+@RequestMapping("/api/eventparticipants")
 public class EventParticipantController {
 
-    private final EventParticipantService eventParticipantService;
+    private final EventParticipantRepository eventParticipantRepository;
+    private final EventRepository eventRepository;
+    private final ParticipantRepository participantRepository;
 
-    public EventParticipantController(EventParticipantService eventParticipantService) {
-        this.eventParticipantService = eventParticipantService;
+    public EventParticipantController(EventParticipantRepository eventParticipantRepository,
+                                      EventRepository eventRepository,
+                                      ParticipantRepository participantRepository) {
+        this.eventParticipantRepository = eventParticipantRepository;
+        this.eventRepository = eventRepository;
+        this.participantRepository = participantRepository;
     }
 
-    @PostMapping
-    public ResponseEntity<EventParticipant> registerParticipant(@RequestBody EventParticipant eventParticipant) {
-        EventParticipant registered = eventParticipantService.registerParticipant(eventParticipant);
-        return new ResponseEntity<>(registered, HttpStatus.CREATED);
+    @GetMapping
+    public List<EventParticipant> getAllEventParticipants() {
+        return eventParticipantRepository.findAll();
     }
 
-    @GetMapping("/event")
-    public ResponseEntity<List<EventParticipant>> getRegistrationsByEventId(@RequestParam Long eventId) {
-        List<EventParticipant> registrations = eventParticipantService.getRegistrationsByEventId(eventId);
-        return ResponseEntity.ok(registrations);
-    }
-
-    @GetMapping("/participant")
-    public ResponseEntity<List<EventParticipant>> getRegistrationsByParticipantId(@RequestParam Long participantId) {
-        List<EventParticipant> registrations = eventParticipantService.getRegistrationsByParticipantId(participantId);
-        return ResponseEntity.ok(registrations);
-    }
-
-    @GetMapping("/lookup")
-    public ResponseEntity<EventParticipant> getRegistrationByEventAndParticipant(@RequestParam Long eventId,
-                                                                                 @RequestParam Long participantId) {
-        Optional<EventParticipant> registration = eventParticipantService.getRegistrationByEventIdAndParticipantId(eventId, participantId);
-        return registration.map(ResponseEntity::ok)
+    @GetMapping("/{id}")
+    public ResponseEntity<EventParticipant> getEventParticipantById(@PathVariable Long id) {
+        Optional<EventParticipant> ep = eventParticipantRepository.findById(id);
+        return ep.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<Long> countRegistrationsForEvent(@RequestParam Long eventId) {
-        long count = eventParticipantService.countRegistrationsForEvent(eventId);
-        return ResponseEntity.ok(count);
+    @PostMapping
+    @Operation(
+            summary = "Register participant for an event",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"eventId\": 1,\n  \"participantId\": 2\n}")
+                    )
+            )
+    )
+    public ResponseEntity<EventParticipant> createEventParticipant(@RequestBody Map<String, Object> payload) {
+        try {
+            Long eventId = Long.valueOf(String.valueOf(payload.get("eventId")));
+            Long participantId = Long.valueOf(String.valueOf(payload.get("participantId")));
+
+            Optional<Event> eventOpt = eventRepository.findById(eventId);
+            Optional<Participant> participantOpt = participantRepository.findById(participantId);
+            if (eventOpt.isEmpty() || participantOpt.isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
+            EventParticipant eventParticipant = new EventParticipant();
+            eventParticipant.setEvent(eventOpt.get());
+            eventParticipant.setParticipant(participantOpt.get());
+            eventParticipant.setRegisteredAt(LocalDateTime.now());
+
+            return ResponseEntity.ok(eventParticipantRepository.save(eventParticipant));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    @Operation(
+            summary = "Update event participant",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"registeredAt\": \"2025-06-20T18:45:00\"\n}")
+                    )
+            )
+    )
+    public ResponseEntity<EventParticipant> updateEventParticipant(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        Optional<EventParticipant> optionalEP = eventParticipantRepository.findById(id);
+        if (optionalEP.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        try {
+            EventParticipant ep = optionalEP.get();
+            if(payload.containsKey("registeredAt")) {
+                String regTimeStr = (String) payload.get("registeredAt");
+                ep.setRegisteredAt(LocalDateTime.parse(regTimeStr));
+            }
+            return ResponseEntity.ok(eventParticipantRepository.save(ep));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeRegistration(@PathVariable Long id) {
-        eventParticipantService.removeRegistration(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteEventParticipant(@PathVariable Long id) {
+        if(eventParticipantRepository.existsById(id)) {
+            eventParticipantRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

@@ -1,8 +1,12 @@
 package sk.kasv.robert.eventmanager.entity;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 public class Event {
 
@@ -39,74 +43,21 @@ public class Event {
         this.endTime = endTime;
     }
 
-    // Getters and Setters
-
-    public Long getId() {
-        return id;
-    }
-
-
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public User getOrganizer() {
-        return organizer;
-    }
-
-    public void setOrganizer(User organizer) {
-        this.organizer = organizer;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public List<EventParticipant> getEventParticipants() {
-        return eventParticipants;
-    }
-
-    public void setEventParticipants(List<EventParticipant> eventParticipants) {
-        this.eventParticipants = eventParticipants;
-    }
+    public Long getId() { return id; }
+    public String getEventName() { return eventName; }
+    public void setEventName(String eventName) { this.eventName = eventName; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+    public User getOrganizer() { return organizer; }
+    public void setOrganizer(User organizer) { this.organizer = organizer; }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
+    public Location getLocation() { return location; }
+    public void setLocation(Location location) { this.location = location; }
+    public List<EventParticipant> getEventParticipants() { return eventParticipants; }
+    public void setEventParticipants(List<EventParticipant> eventParticipants) { this.eventParticipants = eventParticipants; }
 }

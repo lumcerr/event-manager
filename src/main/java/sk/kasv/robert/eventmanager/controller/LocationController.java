@@ -1,65 +1,85 @@
 package sk.kasv.robert.eventmanager.controller;
 
-import sk.kasv.robert.eventmanager.entity.Location;
-import sk.kasv.robert.eventmanager.service.LocationService;
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import sk.kasv.robert.eventmanager.entity.Location;
+import sk.kasv.robert.eventmanager.repository.LocationRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/locations")
 public class LocationController {
 
-    private final LocationService locationService;
+    private final LocationRepository locationRepository;
 
-    public LocationController(LocationService locationService) {
-        this.locationService = locationService;
+    public LocationController(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<Location>> getAllLocations() {
-        List<Location> locations = locationService.getAllLocations();
-        return ResponseEntity.ok(locations);
+    public List<Location> getAllLocations() {
+        return locationRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Location> getLocationById(@PathVariable Long id) {
-        Optional<Location> locationOptional = locationService.getLocationById(id);
-        return locationOptional.map(ResponseEntity::ok)
+        Optional<Location> location = locationRepository.findById(id);
+        return location.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/city")
-    public ResponseEntity<List<Location>> getLocationsByCity(@RequestParam String name) {
-        List<Location> locations = locationService.getLocationsByCity(name);
-        return ResponseEntity.ok(locations);
-    }
-
-    @GetMapping("/address")
-    public ResponseEntity<List<Location>> searchLocationsByAddress(@RequestParam String keyword) {
-        List<Location> locations = locationService.searchLocationsByAddress(keyword);
-        return ResponseEntity.ok(locations);
     }
 
     @PostMapping
-    public ResponseEntity<Location> createLocation(@RequestBody Location location) {
-        Location createdLocation = locationService.createLocation(location);
-        return new ResponseEntity<>(createdLocation, HttpStatus.CREATED);
+    @Operation(
+            summary = "Create new location",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"address\": \"123 Main St\",\n  \"city\": \"Springfield\"\n}")
+                    )
+            )
+    )
+    public ResponseEntity<Location> createLocation(@RequestBody Map<String, String> body) {
+        String address = body.get("address");
+        String city = body.get("city");
+        Location location = new Location();
+        location.setAddress(address);
+        location.setCity(city);
+        return ResponseEntity.ok(locationRepository.save(location));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
-        Optional<Location> updatedLocation = locationService.updateLocation(id, location);
-        return updatedLocation.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @Operation(
+            summary = "Update location",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"address\": \"456 Oak Ave\",\n  \"city\": \"Shelbyville\"\n}")
+                    )
+            )
+    )
+    public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        Optional<Location> optionalLocation = locationRepository.findById(id);
+        if (optionalLocation.isPresent()) {
+            Location location = optionalLocation.get();
+            location.setAddress(body.get("address"));
+            location.setCity(body.get("city"));
+            return ResponseEntity.ok(locationRepository.save(location));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
-        locationService.deleteLocation(id);
-        return ResponseEntity.noContent().build();
+        if (locationRepository.existsById(id)) {
+            locationRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

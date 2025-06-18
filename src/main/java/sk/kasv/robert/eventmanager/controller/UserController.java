@@ -1,11 +1,15 @@
 package sk.kasv.robert.eventmanager.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.kasv.robert.eventmanager.entity.User;
 import sk.kasv.robert.eventmanager.repository.UserRepository;
-
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -27,25 +31,45 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
         return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    @Operation(
+            summary = "Create a new user",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"name\": \"Alice\",\n  \"email\": \"alice@example.com\"\n}")
+                    )
+            )
+    )
+    public ResponseEntity<User> createUser(@RequestBody Map<String, String> body) {
+        String name = body.get("name");
+        String email = body.get("email");
+        User user = new User(name, email);
+        return ResponseEntity.ok(userRepository.save(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User newUserInfo) {
+    @Operation(
+            summary = "Update user",
+            requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\n  \"name\": \"Alice Updated\",\n  \"email\": \"alice.updated@example.com\"\n}")
+                    )
+            )
+    )
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody Map<String, String> body) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setName(newUserInfo.getName());
-            user.setEmail(newUserInfo.getEmail());
+            user.setName(body.get("name"));
+            user.setEmail(body.get("email"));
             return ResponseEntity.ok(userRepository.save(user));
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
