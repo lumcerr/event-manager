@@ -18,7 +18,7 @@
 	<description>Event Manager Application with Spring Boot, Hibernate, and H2 Database</description>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
